@@ -1,57 +1,108 @@
-package main   
+package main
 
-import "database/sql"
-import "fmt"
-import	_ "github.com/go-sql-driver/mysql"
+import (
+	"database/sql"
+	"fmt"
+	"log"
 
-type RegistroVotos struct {
-  Dni           string `json:"dni"`
-  Registrado    bool   `json:"registrado"`
-  Created_at    string `json:"created_at"`
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/gofiber/fiber/v2"
+)
+
+// Database instance
+var db *sql.DB
+
+// Database settings
+const (
+	host     = "localhost"
+	port     = 3306 // Default port
+	user     = "root"
+	password = ""
+	dbname   = "vi"
+)
+
+// Employee struct
+type Padron struct {
+	Dni         int     `json:"dni"`
+	Nombre      string  `json:"nombre"`
+  	Apellido    string  `json:"apellido"`
+  	Voto        bool    `json:"voto"`
+}
+
+// Employees struct
+type Padrones struct {
+	Padrones []Padron `json:"votantes"`
+}
+
+// Connect function
+func Connect() error {
+	var err error
+	// Use DSN string to open
+	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, dbname))
+	if err != nil {
+		return err
+	}
+	if err = db.Ping(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func main() {
-
-  /*Conección a la base de datos*/
-	db, err := sql.Open("mysql", "root@tcp(127.0.0.1:3306)/gopruebas")
-
-	//Manejo de error
-	if err != nil {		
-		panic(err.Error())
+	// Connect with database
+	if err := Connect(); err != nil {
+		log.Fatal(err)
 	}
 
-	defer db.Close()
+	// Create a Fiber app
+	app := fiber.New()
+
+	// Get all records from MySQL
+	app.Get("/padron", func(c *fiber.Ctx) error {
+		// Get Employee list from database
+		rows, err := db.Query("SELECT dni, nombre, apellido, voto FROM padron")
+		if err != nil {
+			return c.Status(500).SendString(err.Error())
+		}
+		defer rows.Close()
+		result := Padrones{}
+
+		for rows.Next() {
+			padron := Padron{}
+			if err := rows.Scan(&padron.Dni, &padron.Nombre, &padron.Apellido, &padron.Voto); err != nil {
+				return err // Exit if we get an error
+			}
+
+			// Append Employee to Employees
+			result.Padrones = append(result.Padrones, padron)
+		}
+		// Return Employees in JSON format
+		return c.JSON(result)
+	})
+
+	// Add record into MySQL
+	app.Post("/storepadron", func(c *fiber.Ctx) error {
+		//New Padron struct
+		u := new(Padron)
+
+		// Parse body into struct
+		if err := c.BodyParser(u); err != nil {
+			return c.Status(400).SendString(err.Error())
+		}
+
+		// Insert vote into database
+		res, err := db.Query("INSERT INTO padron (dni, nombre, apellido, voto ) VALUES (?, ?, ?, ?)", u.Dni, u.Nombre, u.Apellido, u.Voto )
+		if err != nil {
+			return err
+		}
+
+		// Print result
+		log.Println(res)
+
+		// Return vote in JSON format
+		return c.JSON(u)
+	})
+
 	
-	fmt.Println("Succesfully conected to MySQL database")
-
-
-  /* Insertar datos desde go */
-  insert, err := db.Query("INSERT INTO registrovotos VALUES (DEFAULT, '40048379', 1, '2021-03-04', null)")
-
-  if err != nil {
-    panic(err.Error())
-  }
-
-  defer insert.Close()
-
-  fmt.Println("Se insertado un dato en la base de datos correctamente")
-
-  /* Leer datos desde go*/
-  results, err := db.Query("SELECT dni, registrado, created_at FROM registrovotos")
-
-  if err != nil {
-    panic(err.Error())
-  }
-
-  for results.Next() {
-    
-    var registrosvotos RegistroVotos 
-
-    err = results.Scan(&registrosvotos.Dni, &registrosvotos.Registrado, &registrosvotos.Created_at)
-    if err != nil {
-      panic(err.Error())
-    }
-
-    fmt.Println(registrosvotos.Dni)
-  }
+	log.Fatal(app.Listen(":3000"))
 }
