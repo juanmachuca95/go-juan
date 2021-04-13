@@ -1,19 +1,17 @@
 package api
 
-import(
+import (
 	"go-juan/internal/database"
 	"go-juan/internal/logs"
 )
 
-
 type CreateVoteCMD struct {
-	nomyape       	string `json:"nomyape"`
-	dni        		string `json:"dni"`
-	registrado		string `json:"registrado"`
-	created_at 		string `json:"created_at"`
-	updated_at 		string `json:"updated_at"`
+	nomyape    string `json:"nomyape"`
+	dni        string `json:"dni"`
+	registrado string `json:"registrado"`
+	created_at string `json:"created_at"`
+	updated_at string `json:"updated_at"`
 }
-
 
 func (us *UserService) SaveDni(cmd CreateVoteCMD) (*CreateVoteCMD, error) {
 	/* fecha */

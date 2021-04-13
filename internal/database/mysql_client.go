@@ -1,7 +1,8 @@
 package database
 
+import "fmt"
 import "database/sql"
-import "github.com/go-sql-driver/mysql"
+import _ "github.com/go-sql-driver/mysql"
 import "go-juan/internal/logs"
 
 
@@ -10,18 +11,18 @@ type MySqlClient struct {
 }
 
 func NewMySQLClient() *MySqlClient {
+
+	/*Conección a la base de datos*/
 	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/gopruebas")
 
-	if err != nil {
-		logs.Error("cannot create mysql client")
-		panic(err)
+	//Manejo de error
+	if err != nil {		
+		panic(err.Error())
 	}
 
-	err = db.Ping()
-
-	if err != nil {
-
-	}
-
-	return &MySqlClient{db}
+	defer db.Close()
+	
+	fmt.Println("Succesfully conected to MySQL database")
+	
+	//return &MySqlClient{db}
 }	
