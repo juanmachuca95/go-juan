@@ -3,7 +3,7 @@ package database
 import "fmt"
 import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
-import "go-juan/internal/logs"
+import _ "go-juan/internal/logs"
 
 
 type MySqlClient struct {
@@ -24,5 +24,5 @@ func NewMySQLClient() *MySqlClient {
 	
 	fmt.Println("Succesfully conected to MySQL database")
 	
-	//return &MySqlClient{db}
+	return &MySqlClient{db}
 }	

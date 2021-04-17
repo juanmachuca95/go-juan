@@ -1,5 +1,9 @@
 package api
 
-func getVotes() String {
-	return "SELECT * FROM gopruebas.votos"
+func SelectPadron() string {
+	return "SELECT dni, nombre, apellido, voto FROM padron"
+}
+
+func InsertPadron() string {
+	return "INSERT INTO padron (dni, nombre, apellido, voto ) VALUES (?, ?, ?, ?)"
 }
