@@ -1,5 +1,5 @@
 # Ignore important's files
 
-*.env
-.env
-.env.backup
+# *.env
+# .env
+# .env.backup
