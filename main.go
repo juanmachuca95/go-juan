@@ -13,11 +13,12 @@ import (
 
 // Primera api con Golang
 func main() {
+	//Loading environment's variables
 	loadEnv()
 
-	env := os.Getenv("HOST")
+	port := os.Getenv("HEROKU_PORT")
 
-	fmt.Printf("The host: %s", env)
+	fmt.Printf("The host: %s", port)
 
 	// Create a Fiber app
 	app := fiber.New()
@@ -26,7 +27,12 @@ func main() {
 	api.SetupAppRoutes(app)
 
 	/* Listen to port */
-	_ = app.Listen(":3000")
+	if port == "" {
+		_ = app.Listen(":3000")
+	}else{
+		_ = app.Listen("test")
+	}
+	
 }
 
 func loadEnv(){
