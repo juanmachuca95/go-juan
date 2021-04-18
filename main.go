@@ -30,7 +30,7 @@ func main() {
 	if port == "" {
 		_ = app.Listen(":3000")
 	}else{
-		_ = app.Listen(":" +port) 
+		_ = app.Listen( port )
 	}
 	
 }
