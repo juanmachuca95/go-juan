@@ -14,4 +14,8 @@ func SetupAppRoutes(app *fiber.App) {
 	// Add record into MySQL
 	app.Post("/storepadron", storePadron)
 
+	app.Get("/", func(c *fiber.Ctx) error {
+        return c.SendString("Hello, World 👋! Welcome to my API - GO !!")
+    })
+
 }
