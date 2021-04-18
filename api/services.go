@@ -1,9 +1,18 @@
 package api 
 
-import "github.com/gofiber/fiber/v2"
-import "log"
+import (
+	D "go-juan/internal/database"
+	"github.com/gofiber/fiber/v2"
+	"database/sql"
+	"log"
+)
+
+// Database instance
+var db *sql.DB 
 
 func getPadron(c *fiber.Ctx) error {
+	db = D.Connect( db )
+
 	// Get Employee list from database
 	rows, err := db.Query( SelectPadron() )
 	if err != nil {
@@ -21,12 +30,18 @@ func getPadron(c *fiber.Ctx) error {
 		// Append Employee to Employees
 		result.Padrones = append(result.Padrones, padron)
 	}
+
+	//Close db
+	defer db.Close()
+
 	// Return Employees in JSON format
 	return c.JSON(result)
 }
 
 
 func storePadron(c *fiber.Ctx) error {
+	db = D.Connect( db )
+
 	//New Padron struct
 	u := new(Padron)
 
@@ -43,6 +58,9 @@ func storePadron(c *fiber.Ctx) error {
 
 	// Print result
 	log.Println(res)
+
+	//Close db
+	defer db.Close()
 
 	// Return vote in JSON format
 	return c.JSON(u)
