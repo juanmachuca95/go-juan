@@ -48,7 +48,7 @@ func Connect(db *sql.DB) *sql.DB {
 
 	var err error
 	// Use DSN string to open
-	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", user, password, host, dbname))
+	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", user, password, dbname))
 	if err != nil {
 		panic(err)
 	}

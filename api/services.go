@@ -32,7 +32,7 @@ func getPadron(c *fiber.Ctx) error {
 	}
 
 	//Close db
-	defer db.Close()
+	//defer db.Close()
 
 	// Return Employees in JSON format
 	return c.JSON(result)
@@ -41,7 +41,7 @@ func getPadron(c *fiber.Ctx) error {
 
 func storePadron(c *fiber.Ctx) error {
 	db = D.Connect( db )
-
+	
 	//New Padron struct
 	u := new(Padron)
 
