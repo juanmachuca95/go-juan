@@ -17,7 +17,7 @@ func Connect(db *sql.DB) *sql.DB {
 	var user string 
 	var password string 
 	var dbname string 
-	var port string = "3306"
+	var port string
 
 	if os.Getenv("DEFAULT_CONNECTION") == "true" {
 		fmt.Println("Utilizar la connection en local")
@@ -25,6 +25,7 @@ func Connect(db *sql.DB) *sql.DB {
 		host     = os.Getenv("HOST_LOCAL")
 		user     = os.Getenv("USER_LOCAL")
 		password = os.Getenv("PASSWORD_LOCAL")
+		port     = os.Getenv("PORT_LOCAL")
 		dbname   = os.Getenv("DATABASE_LOCAL")
 		
 	}else {
@@ -33,6 +34,7 @@ func Connect(db *sql.DB) *sql.DB {
 		host     = os.Getenv("HOST")
 		user     = os.Getenv("USER")
 		password = os.Getenv("PASSWORD")
+		port 	 = os.Getenv("PORT")
 		dbname   = os.Getenv("DATABASE")
 	
 		fmt.Println("Utilizar la conección de producción")

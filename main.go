@@ -23,11 +23,11 @@ func main() {
 	api.SetupAppRoutes(app)
 
 	/* Listen to port */
-	port := os.Getenv("PORT")
+	port := os.Getenv("HEROKU")
     if port == "" {
         port = "3000"
     } else {
-		port = os.Getenv("PORT")
+		port = os.Getenv("HEROKU")
 	}
 	
 	fmt.Printf("The host: %s", port)
