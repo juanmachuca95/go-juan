@@ -6,6 +6,7 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 import _ "go-juan/internal/logs"
 
+
 // Database instance
 var db *sql.DB
 
