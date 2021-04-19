@@ -17,6 +17,7 @@ func Connect(db *sql.DB) *sql.DB {
 	var user string 
 	var password string 
 	var dbname string 
+	var port string = "3306"
 
 	if os.Getenv("DEFAULT_CONNECTION") == "true" {
 		fmt.Println("Utilizar la connection en local")
@@ -48,7 +49,7 @@ func Connect(db *sql.DB) *sql.DB {
 
 	var err error
 	// Use DSN string to open
-	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@%s/%s", user, password, host, dbname))
+	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, host, port, dbname))
 	if err != nil {
 		panic(err)
 	}
