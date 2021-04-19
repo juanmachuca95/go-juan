@@ -34,7 +34,7 @@ func Connect(db *sql.DB) *sql.DB {
 		host     = os.Getenv("HOST")
 		user     = os.Getenv("USER")
 		password = os.Getenv("PASSWORD")
-		port 	 = os.Getenv("PORT")
+		port 	 = os.Getenv("PORT_LOCAL")
 		dbname   = os.Getenv("DATABASE")
 	
 		fmt.Println("Utilizar la conección de producción")
