@@ -1,21 +1,21 @@
 package api
 
 import "github.com/gofiber/fiber/v2"
-import _ "github.com/go-sql-driver/mysql"
-import _"log"
-import _"fmt"
-import _"database/sql"
+
 
 /*Mis routes*/
 func SetupAppRoutes(app *fiber.App) {
 
-	// Get all records from MySQL
-	app.Get("/padron", getPadron)
+	// Get all records from MySQL grp.Use(jwtMiddleware(tokenKey)).Post("/permisos", s.PermisoHandler)
+	app.Use(authRequired()).Get("/padron", getPadron)
 	// Add record into MySQL
-	app.Post("/storepadron", storePadron)
+	//app.Post("/storepadron",AuthRequired(), storePadron)
 
+	//app.Get("")
 	app.Get("/", func(c *fiber.Ctx) error {
-        return c.SendString("Hello, World 👋! Welcome to my API - GO !!")
+        return c.SendString("Hola 👋! Bienvenido a mi API Golang")
     })
 
 }
+
+

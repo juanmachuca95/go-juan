@@ -31,9 +31,6 @@ func getPadron(c *fiber.Ctx) error {
 		result.Padrones = append(result.Padrones, padron)
 	}
 
-	//Close db
-	//defer db.Close()
-
 	// Return Employees in JSON format
 	return c.JSON(result)
 }
@@ -58,9 +55,6 @@ func storePadron(c *fiber.Ctx) error {
 
 	// Print result
 	log.Println(res)
-
-	//Close db
-	defer db.Close()
 
 	// Return vote in JSON format
 	return c.JSON(u)
