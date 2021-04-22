@@ -1,6 +1,6 @@
 package api
 
-// Employee struct
+// Padron struct
 type Padron struct {
 	Dni         int     `json:"dni"`
 	Nombre      string  `json:"nombre"`
@@ -8,8 +8,23 @@ type Padron struct {
   	Voto        bool    `json:"voto"`
 }
 
-// Employees struct
+// Padron struct
 type Padrones struct {
 	Padrones []Padron `json:"padron"`
 }
 
+// Usuario struct
+type User struct {
+	Id 			int `json:"id"`
+	Email 		string `json:"email"`
+	Password 	string `json:"password"`
+}
+
+type Users struct{
+	Users []User `json:"users"`
+}
+
+type Login struct{
+	Email 		string `json:"email"`
+	Password 	string `json:"password"`		
+}

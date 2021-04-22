@@ -7,3 +7,8 @@ func SelectPadron() string {
 func InsertPadron() string {
 	return "INSERT INTO padron (dni, nombre, apellido, voto ) VALUES (?, ?, ?, ?)"
 }
+
+// Jefes de mesa
+func LoginUser() string {
+	return "SELECT id, password, email FROM users WHERE email = ?"
+}
