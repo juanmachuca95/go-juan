@@ -7,7 +7,7 @@ import "github.com/gofiber/fiber/v2"
 func SetupAppRoutes(app *fiber.App) {
 
 	app.Get("/", func(c *fiber.Ctx) error {
-        return c.SendString("Hola 👋! Bienvenido a mi API Golang")
+        return c.SendString("Hola 👋! Bienvenido a mi API Golang. Juan Machuca")
     })
 
 	app.Post("/login", login)
