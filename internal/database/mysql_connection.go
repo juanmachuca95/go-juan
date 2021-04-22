@@ -21,7 +21,7 @@ func Connect(db *sql.DB) *sql.DB {
 	var port string
 
 	if os.Getenv("DEFAULT_CONNECTION") == "true" {
-		fmt.Println("Utilizar la connection en local")
+		//fmt.Println("Utilizar la connection en local")
 		// Database settings
 		host     = os.Getenv("HOST_LOCAL")
 		user     = os.Getenv("USER_LOCAL")
@@ -38,17 +38,17 @@ func Connect(db *sql.DB) *sql.DB {
 		port 	 = os.Getenv("PORT_LOCAL")
 		dbname   = os.Getenv("DATABASE")
 	
-		fmt.Println("Utilizar la conección de producción")
+		//fmt.Println("Utilizar la conección de producción")
 	}
 	
 
-	fmt.Printf("%s", host)
+	/* fmt.Printf("%s", host)
 	fmt.Println("***********")
 	fmt.Printf("%s", user)
 	fmt.Println("***********")
 	fmt.Printf("%s", password)
 	fmt.Println("***********")
-	fmt.Printf("%s", dbname)
+	fmt.Printf("%s", dbname) */
 
 	var err error
 	// Use DSN string to open

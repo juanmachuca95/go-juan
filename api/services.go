@@ -9,54 +9,85 @@ import (
 	"log"
 	"time"
 	"os" 
+	"fmt"
 )
 
 // Database instance
 var db *sql.DB 
 
-func getPadron(c *fiber.Ctx) error {
-	db = D.Connect( db )
+func updatePadron(c *fiber.Ctx) error {
+	
+	dni := new(Padron)
+	user := new(User)
+	err := c.BodyParser(&dni)
+	fmt.Println(dni.Dni)
+	if  err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":"Cannot parse json",
+		})
+	}
+	db = D.Connect(db)
+	res := db.QueryRow(GetVotante(), dni.Dni)
+	if res != nil {
+		err := res.Scan(&user.Id)
+		if(err != nil){
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error":"No existe usuario con este dni.",
+			})
+		}
+	}
 
-	// Get Employee list from database
+	resp, err := db.Query(UpdatePadron(), user.Id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":"No se ha podido actualizar este registro.",
+		})
+	}
+	log.Println(resp)
+    fmt.Println(user.Id)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"mensaje": "Se ha actualizado el padron correctamente.",
+		"ok": true,
+ 	})
+}
+
+
+func getPadron(c *fiber.Ctx) error {
+
+	db = D.Connect( db )
 	rows, err := db.Query( SelectPadron() )
 	if err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
+
 	defer rows.Close()
 	result := Padrones{}
 
 	for rows.Next() {
 		padron := Padron{}
 		if err := rows.Scan(&padron.Dni, &padron.Nombre, &padron.Apellido, &padron.Voto); err != nil {
-			return err // Exit if we get an error
+			return err
 		}
-
-		// Append Employee to Employees
 		result.Padrones = append(result.Padrones, padron)
 	}
-
-	// Return Employees in JSON format
 	return c.JSON(result)
 }
 
 
 func storePadron(c *fiber.Ctx) error {
-	db = D.Connect( db )
-	u := new(Padron) //New Padron struct
 
-	// Parse body into struct
+	db = D.Connect( db )
+	u := new(Padron)
 	if err := c.BodyParser(u); err != nil {
 		return c.Status(400).SendString(err.Error())
 	}
 
-	// Insert vote into database
 	res, err := db.Query( InsertPadron() , u.Dni, u.Nombre, u.Apellido, u.Voto )
 	if err != nil {
 		return err
 	}
-	
-	log.Println(res) // Print result
 
+	log.Println(res) 
 	return c.JSON(u)
 }
 
@@ -65,12 +96,7 @@ func login(c *fiber.Ctx) error {
 
 	login := new(Login)
 	user := new(User)
-	/* var id int
-	var email string
-	var password string */
-
 	err := c.BodyParser(&login)
-	
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Cannot parse json",
@@ -79,7 +105,6 @@ func login(c *fiber.Ctx) error {
 
 	db = D.Connect( db )
 	res := db.QueryRow(LoginUser(),login.Email) // Buscamos el usuario por el email
-	
 	if res != nil {
 		err := res.Scan(&user.Id, &user.Password, &user.Email)
 		if(err != nil){
@@ -91,26 +116,21 @@ func login(c *fiber.Ctx) error {
 	
 	hash := user.Password
 	hashComoByte := []byte(hash)
-
 	contraseña := login.Password
 	contraseñaComoByte := []byte(contraseña)
-
 	error := bcrypt.CompareHashAndPassword(hashComoByte, contraseñaComoByte) // Validación de la contrasenia por el hash
 	if error != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"error":"Bad credentials",
 		})
 	}
-	
-	//print("Contraseña correcta")
+
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["sub"] = "1"
 	claims["exp"] = time.Now().Add(time.Hour * 24 * 7) // Una semana
-
 	jwtSecret := os.Getenv("TOKEN_KEY")
 	s, err := token.SignedString([]byte( jwtSecret ))
-
 	if err != nil {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
@@ -126,3 +146,5 @@ func login(c *fiber.Ctx) error {
 		},
  	})
 }
+
+
