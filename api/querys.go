@@ -9,7 +9,7 @@ func InsertPadron() string {
 }
 
 func InsertDniPadron() string {
-	return "INSERT INTO padron (dni, voto ) VALUES (?, 1)"
+	return "INSERT INTO padron (dni, voto ) VALUES (?, ?)"
 }
 
 func UpdatePadron() string {
