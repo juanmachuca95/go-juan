@@ -87,15 +87,18 @@ func storeDniPadron(c *fiber.Ctx) error {
 		})
 	}
 
-	bool voto = true;
-	res, err := db.Query( InsertDniPadron(), p.Dni, voto)
+	res, err := db.Query( InsertDniPadron(), p.Dni, true)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Dni duplicado o con valores incorrectos.",
 		})
 	}
 
-	print(res)
+	if( res != nil ){
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":"No se ha podido registrar este documento.",
+		})
+	 }
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message":"Se ha actualizado un registro en el padron.",
