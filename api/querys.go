@@ -8,6 +8,10 @@ func InsertPadron() string {
 	return "INSERT INTO padron (dni, nombre, apellido, voto ) VALUES (?, ?, ?, ?)"
 }
 
+func InsertDniPadron() string {
+	return "INSERT INTO padron (dni, voto ) VALUES (?, 1)"
+}
+
 func UpdatePadron() string {
 	return "UPDATE padron SET voto=1 WHERE id= ?"
 }

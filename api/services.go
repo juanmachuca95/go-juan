@@ -76,6 +76,32 @@ func getPadron(c *fiber.Ctx) error {
 }
 
 
+func storeDniPadron(c *fiber.Ctx) error {
+	db = D.Connect( db )
+
+	p := new(Padron)
+	err := c.BodyParser(&p.Dni)
+	if  err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":"Cannot parse json",
+		})
+	}
+
+
+	res, err := db.Query( InsertDniPadron() , p.Dni )
+	if err != nil {
+		return err
+	}
+
+	log.Println(res)
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message":"Se ha actualizado un registro en el padron.",
+	});
+
+}
+
+
 func storePadron(c *fiber.Ctx) error {
 
 	db = D.Connect( db )
