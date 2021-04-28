@@ -14,7 +14,7 @@ func SetupAppRoutes(app *fiber.App) {
 
 	app.Use(authRequired()).Get("/padron", getPadron) // READ PADRON
 
-	app.Use(authRequired()).Post("/storednipadron", storePadron) // CREATE PADRON POR DNI NO ENCONTRADO
+	app.Use(authRequired()).Post("/storednipadron", storeDniPadron) // CREATE PADRON POR DNI NO ENCONTRADO
 
 	//app.Use(authRequired()).Post("/storepadron", storePadron) // CREATE PADRON
 
