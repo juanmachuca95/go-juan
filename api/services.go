@@ -80,7 +80,7 @@ func storeDniPadron(c *fiber.Ctx) error {
 	db = D.Connect( db )
 
 	p := new(Padron)
-	err := c.BodyParser(&p.Dni)
+	err := c.BodyParser(&p)
 	if  err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Cannot parse json",
