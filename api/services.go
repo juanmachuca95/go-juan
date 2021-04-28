@@ -45,6 +45,8 @@ func updatePadron(c *fiber.Ctx) error {
 	}
 	log.Println(resp)
     fmt.Println(user.Id)
+
+	defer db.Close();
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"mensaje": "Se ha actualizado el padron correctamente.",
 		"ok": true,
@@ -92,6 +94,7 @@ func storePadron(c *fiber.Ctx) error {
 }
 
 
+// LOGIN APLICATION
 func login(c *fiber.Ctx) error {
 
 	login := new(Login)
