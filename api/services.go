@@ -94,7 +94,7 @@ func storeDniPadron(c *fiber.Ctx) error {
 		})
 	}
 
-	if( res != nil ){
+	if( res == nil ){
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"No se ha podido registrar este documento.",
 		})
