@@ -87,10 +87,11 @@ func storeDniPadron(c *fiber.Ctx) error {
 		})
 	}
 
-
 	res, err := db.Query( InsertDniPadron() , p.Dni, 1 )
 	if err != nil {
-		return err
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error":"Dni duplicado o con valores incorrectos.",
+		})
 	}
 
 	log.Println(res)
