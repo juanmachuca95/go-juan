@@ -81,7 +81,7 @@ func storeDniPadron(c *fiber.Ctx) error {
 
 	p := new(Padron)
 	err := c.BodyParser(&p.Dni)
-	&p.Voto = 1
+	p.Voto = true
 	if  err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Cannot parse json",
