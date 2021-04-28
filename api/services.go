@@ -81,14 +81,13 @@ func storeDniPadron(c *fiber.Ctx) error {
 
 	p := new(Padron)
 	err := c.BodyParser(&p.Dni)
-	p.Voto = true
 	if  err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Cannot parse json",
 		})
 	}
 
-	res, err := db.Query( InsertPadron(), &p.Dni, &p.Nombre, &p.Apellido, &p.Voto )
+	res, err := db.Query( InsertPadron(), &p.Dni, "", "", 1 )
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Dni duplicado o con valores incorrectos.",
