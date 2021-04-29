@@ -100,6 +100,8 @@ func storeDniPadron(c *fiber.Ctx) error {
 		})
 	 }
 
+	defer db.Close()
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message":"Se ha actualizado un registro en el padron.",
 	});
