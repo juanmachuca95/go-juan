@@ -33,7 +33,7 @@ func updatePadron(c *fiber.Ctx) error {
 		if(err != nil){
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error":"No existe usuario con este dni.",
-				"cod_error": 1,
+				"cod_error": 1, // Necesita cargar este dni. 
 			})
 		}
 	}
@@ -93,12 +93,14 @@ func storeDniPadron(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"Dni duplicado o con valores incorrectos.",
+			"cod_error": 1,
 		})
 	}
 
 	if( res == nil ){
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"No se ha podido registrar este documento.",
+			"cod_error": 2,
 		})
 	 }
 
