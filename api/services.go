@@ -33,6 +33,7 @@ func updatePadron(c *fiber.Ctx) error {
 		if(err != nil){
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error":"No existe usuario con este dni.",
+				"cod_error": 1,
 			})
 		}
 	}
@@ -41,6 +42,7 @@ func updatePadron(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error":"No se ha podido actualizar este registro.",
+			"cod_error": 2,
 		})
 	}
 	log.Println(resp)
